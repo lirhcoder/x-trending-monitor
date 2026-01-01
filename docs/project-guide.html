@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X/Twitter Trending Monitor - 项目文档</title>
+    <title>X/Twitter Trending Monitor - 项目文档 V2</title>
     <style>
         * {
             margin: 0;
@@ -32,6 +32,13 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+        .version-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
         }
         .subtitle {
             color: #666;
@@ -133,6 +140,10 @@
             margin: 8px;
             font-weight: 500;
         }
+        .arch-box.ai {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%);
+        }
         .arch-arrow {
             color: #1d9bf0;
             font-size: 24px;
@@ -156,9 +167,17 @@
             background: #e7f3ff;
             color: #1d9bf0;
         }
+        .badge-purple {
+            background: #f3e8ff;
+            color: #764ba2;
+        }
         .badge-green {
             background: #d4edda;
             color: #28a745;
+        }
+        .badge-red {
+            background: #f8d7da;
+            color: #dc3545;
         }
         .badge-orange {
             background: #fff3cd;
@@ -189,6 +208,42 @@
         .toc a:hover {
             text-decoration: underline;
         }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .feature-card .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .feature-card h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .feature-card p {
+            font-size: 12px;
+            color: #666;
+            margin: 0;
+        }
+        .screenshot {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 16px 0;
+            background: #f8f9fa;
+        }
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
         footer {
             margin-top: 40px;
             padding-top: 20px;
@@ -196,6 +251,25 @@
             color: #666;
             font-size: 14px;
             text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1d9bf0;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 4px;
+        }
+        .btn:hover {
+            background: #1a8cd8;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
         }
     </style>
 </head>
@@ -206,395 +280,390 @@
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
             </svg>
             X/Twitter Trending Monitor
+            <span class="version-badge">V2.0</span>
         </h1>
-        <p class="subtitle">自动监控 X/Twitter 热门话题，发现高互动帖子并发送邮件通知</p>
+        <p class="subtitle">AI驱动的社交媒体营销机会发现系统 - 专为 Sparticle 定制</p>
+
+        <div style="margin-bottom: 24px;">
+            <a href="index.html" class="btn">查看Dashboard</a>
+            <a href="https://github.com/lirhcoder/x-trending-monitor" class="btn btn-secondary">GitHub仓库</a>
+        </div>
 
         <div class="toc">
             <h3>目录</h3>
             <ul>
                 <li><a href="#overview">1. 项目概述</a></li>
-                <li><a href="#architecture">2. 技术架构</a></li>
-                <li><a href="#workflow">3. 工作流程</a></li>
-                <li><a href="#config">4. 配置说明</a></li>
-                <li><a href="#usage">5. 使用方法</a></li>
-                <li><a href="#upgrade">6. 升级与维护</a></li>
-                <li><a href="#troubleshooting">7. 常见问题</a></li>
+                <li><a href="#features">2. 核心功能</a></li>
+                <li><a href="#architecture">3. 技术架构</a></li>
+                <li><a href="#workflow">4. 工作流程</a></li>
+                <li><a href="#schedule">5. 运行计划</a></li>
+                <li><a href="#config">6. 配置说明</a></li>
+                <li><a href="#usage">7. 使用方法</a></li>
+                <li><a href="#upgrade">8. 升级与维护</a></li>
             </ul>
         </div>
 
         <h2 id="overview">1. 项目概述</h2>
 
         <h3>1.1 目标</h3>
-        <p>自动发现 X/Twitter 上的高流量热门帖子，及时通知团队进行内容互动，借助热门话题提升 GBase 品牌曝光度。</p>
+        <p>自动发现 X/Twitter 上与 Sparticle 业务相关的高流量热门帖子，通过 AI 分析提供互动建议，帮助团队精准把握社交媒体营销机会，提升品牌曝光度。</p>
 
-        <h3>1.2 核心功能</h3>
-        <ul>
-            <li><strong>关键词监控</strong>：追踪指定关键词相关的高互动帖子</li>
-            <li><strong>账号监控</strong>：追踪指定 KOL 账号的热门内容</li>
-            <li><strong>智能检测</strong>：基于互动量阈值自动识别热门内容</li>
-            <li><strong>邮件通知</strong>：发现热门内容后自动发送邮件提醒</li>
-            <li><strong>定时执行</strong>：通过 GitHub Actions 每 15 分钟自动检查</li>
-        </ul>
+        <h3>1.2 V2 新特性</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon">🤖</div>
+                <h4>AI智能分析</h4>
+                <p>Google Gemini 分析帖子与业务相关性</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🌐</div>
+                <h4>中文翻译</h4>
+                <p>自动翻译所有外语帖子</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h4>优先级排序</h4>
+                <p>智能推荐最值得互动的帖子</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📁</div>
+                <h4>历史存档</h4>
+                <p>保留每日所有监控记录</p>
+            </div>
+        </div>
 
-        <h3>1.3 检测规则</h3>
+        <h2 id="features">2. 核心功能</h2>
+
+        <h3>2.1 智能监控</h3>
         <table>
             <tr>
-                <th>规则类型</th>
-                <th>触发条件</th>
+                <th>功能</th>
                 <th>说明</th>
             </tr>
             <tr>
-                <td><span class="badge badge-green">绝对阈值</span></td>
-                <td>总互动量 ≥ 5,000</td>
-                <td>点赞 + 转发 + 回复 + 引用</td>
+                <td><strong>关键词监控</strong></td>
+                <td>追踪 AI agent、enterprise AI、meeting transcription、RAG 等相关话题</td>
             </tr>
             <tr>
-                <td><span class="badge badge-orange">快速增长</span></td>
-                <td>增长速度 ≥ 1,000/小时</td>
-                <td>检测短时间内爆发的内容</td>
+                <td><strong>KOL追踪</strong></td>
+                <td>监控 @elonmusk、@sama、@karpathy、@OpenAI 等账号动态</td>
+            </tr>
+            <tr>
+                <td><strong>阈值检测</strong></td>
+                <td>总互动量 ≥ 5,000 或 增长速度 ≥ 1,000/小时</td>
             </tr>
         </table>
 
-        <h2 id="architecture">2. 技术架构</h2>
+        <h3>2.2 AI分析引擎</h3>
+        <p>使用 Google Gemini AI 对每条帖子进行深度分析：</p>
+        <ul>
+            <li><strong>相关性评分</strong> (1-10)：与 Sparticle 产品的关联程度</li>
+            <li><strong>互动潜力</strong> (1-10)：回复后获得曝光的可能性</li>
+            <li><strong>中文翻译</strong>：自动翻译帖子内容</li>
+            <li><strong>回复建议</strong>：如何切入话题推广产品</li>
+        </ul>
 
-        <h3>2.1 架构图</h3>
+        <h3>2.3 优先级分类</h3>
+        <table>
+            <tr>
+                <th>级别</th>
+                <th>标签</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td><span class="badge badge-red">高优先级</span></td>
+                <td>高优先级回复</td>
+                <td>强烈建议立即互动，与业务高度相关</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-orange">建议回复</span></td>
+                <td>建议回复</td>
+                <td>值得花时间互动</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-green">可选</span></td>
+                <td>可选回复</td>
+                <td>有一定价值但非必须</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-blue">观察</span></td>
+                <td>仅观察</td>
+                <td>相关性低或不适合商业互动</td>
+            </tr>
+        </table>
+
+        <h3>2.4 历史存档</h3>
+        <ul>
+            <li>每次运行自动保存 Dashboard 快照</li>
+            <li>按日期组织：<code>docs/history/2026-01-01/</code></li>
+            <li>首页提供历史记录导航</li>
+            <li>可回溯查看任意时间点的监控结果</li>
+        </ul>
+
+        <h2 id="architecture">3. 技术架构</h2>
+
+        <h3>3.1 架构图</h3>
         <div class="arch-diagram">
-            <div class="arch-box">GitHub Actions<br><small>定时触发器</small></div>
+            <div class="arch-box">GitHub Actions<br><small>定时触发 (每小时)</small></div>
             <span class="arch-arrow">→</span>
-            <div class="arch-box">Python 脚本<br><small>监控逻辑</small></div>
+            <div class="arch-box">RapidAPI<br><small>Twitter数据</small></div>
             <span class="arch-arrow">→</span>
-            <div class="arch-box">RapidAPI<br><small>Twitter 数据</small></div>
-            <br><br>
-            <div class="arch-box">Python 脚本</div>
+            <div class="arch-box ai">Google Gemini<br><small>AI分析+翻译</small></div>
             <span class="arch-arrow">→</span>
-            <div class="arch-box">SendGrid<br><small>邮件服务</small></div>
-            <span class="arch-arrow">→</span>
-            <div class="arch-box">团队邮箱<br><small>接收通知</small></div>
+            <div class="arch-box">GitHub Pages<br><small>Dashboard展示</small></div>
         </div>
 
-        <h3>2.2 技术栈</h3>
+        <h3>3.2 技术栈</h3>
         <table>
             <tr>
                 <th>组件</th>
-                <th>技术选型</th>
-                <th>说明</th>
+                <th>技术</th>
+                <th>用途</th>
             </tr>
             <tr>
                 <td>运行环境</td>
                 <td>GitHub Actions</td>
-                <td>免费的 Serverless 定时任务</td>
+                <td>免费Serverless定时任务</td>
             </tr>
             <tr>
                 <td>编程语言</td>
                 <td>Python 3.11</td>
-                <td>简洁高效，生态丰富</td>
+                <td>核心逻辑</td>
             </tr>
             <tr>
                 <td>Twitter API</td>
                 <td>RapidAPI (twitter-api45)</td>
-                <td>性价比高的第三方 API</td>
+                <td>获取推文数据</td>
             </tr>
             <tr>
-                <td>邮件服务</td>
-                <td>SendGrid</td>
-                <td>免费 100 封/天</td>
+                <td>AI引擎</td>
+                <td>Google Gemini</td>
+                <td>内容分析、翻译、推荐</td>
             </tr>
             <tr>
-                <td>代码托管</td>
-                <td>GitHub</td>
-                <td>版本控制 + CI/CD</td>
+                <td>前端展示</td>
+                <td>GitHub Pages</td>
+                <td>静态Dashboard托管</td>
             </tr>
         </table>
 
-        <h3>2.3 项目结构</h3>
+        <h3>3.3 项目结构</h3>
         <div class="file-tree">
 x-trending-monitor/<br>
 ├── .github/workflows/<br>
-│   └── monitor.yml          # GitHub Actions 定时任务配置<br>
+│   └── monitor.yml          # GitHub Actions 定时任务<br>
 ├── scripts/<br>
-│   ├── main.py              # 主入口，协调监控和通知<br>
-│   ├── monitor.py           # 核心监控逻辑<br>
-│   └── notifier.py          # 邮件通知模块<br>
-├── config.json              # 监控配置（关键词、账号、阈值）<br>
-├── references/<br>
-│   ├── setup-guide.md       # 部署指南<br>
-│   └── deployment-guide.md  # 详细部署文档<br>
-└── assets/<br>
-    ├── config.template.json # 配置模板<br>
-    └── requirements.txt     # Python 依赖
+│   ├── main.py              # 主入口<br>
+│   ├── monitor.py           # 推文监控<br>
+│   ├── analyzer.py          # AI分析 (Gemini)<br>
+│   ├── html_generator.py    # Dashboard生成<br>
+│   ├── generate_index.py    # 历史索引生成<br>
+│   └── notifier.py          # 邮件通知 (V1)<br>
+├── docs/<br>
+│   ├── index.html           # 首页 (含历史导航)<br>
+│   ├── dashboard.html       # 最新Dashboard<br>
+│   ├── data.json            # 数据文件<br>
+│   └── history/             # 历史存档<br>
+│       └── 2026-01-01/<br>
+│           ├── dashboard_20260101_0900.html<br>
+│           └── data_20260101_0900.json<br>
+├── config.json              # 监控配置<br>
+└── Sparticle_公司调查报告.md  # 公司信息 (AI参考)
         </div>
 
-        <h2 id="workflow">3. 工作流程</h2>
+        <h2 id="workflow">4. 工作流程</h2>
 
-        <h3>3.1 执行流程</h3>
+        <h3>4.1 执行流程</h3>
         <ol>
-            <li><strong>定时触发</strong>：GitHub Actions 每 15 分钟自动启动</li>
-            <li><strong>加载配置</strong>：读取 config.json 中的关键词和账号列表</li>
-            <li><strong>数据采集</strong>：
-                <ul>
-                    <li>调用 RapidAPI 搜索关键词相关推文</li>
-                    <li>获取指定账号的最新推文</li>
-                </ul>
-            </li>
-            <li><strong>热度分析</strong>：
-                <ul>
-                    <li>计算每条推文的总互动量</li>
-                    <li>对比历史数据计算增长速度</li>
-                    <li>筛选超过阈值的推文</li>
-                </ul>
-            </li>
-            <li><strong>去重处理</strong>：排除已通知过的推文，避免重复提醒</li>
-            <li><strong>发送通知</strong>：将热门推文整理成邮件发送给团队</li>
+            <li><strong>定时触发</strong>：GitHub Actions 每小时自动启动</li>
+            <li><strong>数据采集</strong>：通过 RapidAPI 获取关键词搜索结果和 KOL 时间线</li>
+            <li><strong>阈值过滤</strong>：筛选互动量超过阈值的帖子</li>
+            <li><strong>AI分析</strong>：Google Gemini 分析相关性、翻译内容、生成建议</li>
+            <li><strong>优先级排序</strong>：按综合得分排序</li>
+            <li><strong>生成Dashboard</strong>：创建静态HTML页面</li>
+            <li><strong>存档历史</strong>：保存当前快照到历史目录</li>
+            <li><strong>自动部署</strong>：推送到 GitHub Pages</li>
         </ol>
 
-        <h3>3.2 邮件通知示例</h3>
+        <h3>4.2 AI分析示例</h3>
         <div class="info">
-            <strong>邮件标题：</strong>[X Monitor] 36 Trending Post(s) Detected!<br><br>
-            <strong>邮件内容包含：</strong>
+            <strong>输入帖子：</strong>"Just tested the new AI meeting transcription tool. Game changer for productivity!"<br><br>
+            <strong>AI输出：</strong>
             <ul>
-                <li>推文内容预览</li>
-                <li>互动数据（点赞、转发、回复）</li>
-                <li>增长速度（如适用）</li>
-                <li>原文链接（可直接点击查看）</li>
+                <li><strong>翻译：</strong>刚测试了新的AI会议转录工具，简直是生产力的革命！</li>
+                <li><strong>相关性：</strong>9/10 - 直接讨论AI会议转录，与GBase核心功能高度匹配</li>
+                <li><strong>互动潜力：</strong>8/10 - 热门话题，作者有影响力</li>
+                <li><strong>建议：</strong>高优先级回复 - 可介绍GBase的会议议事录自动生成功能</li>
             </ul>
         </div>
 
-        <h2 id="config">4. 配置说明</h2>
+        <h2 id="schedule">5. 运行计划</h2>
 
-        <h3>4.1 监控配置 (config.json)</h3>
+        <h3>5.1 执行时间</h3>
+        <table>
+            <tr>
+                <th>项目</th>
+                <th>设置</th>
+            </tr>
+            <tr>
+                <td>执行频率</td>
+                <td>每小时执行一次</td>
+            </tr>
+            <tr>
+                <td>运行时段</td>
+                <td>日本时间 9:00 - 21:00 (共13次/天)</td>
+            </tr>
+            <tr>
+                <td>每日重置</td>
+                <td>每天 9:00 JST 清除历史记录，重新检测</td>
+            </tr>
+        </table>
+
+        <h3>5.2 时间对照</h3>
+        <table>
+            <tr>
+                <th>日本时间 (JST)</th>
+                <th>UTC时间</th>
+                <th>北京时间 (CST)</th>
+            </tr>
+            <tr><td>09:00</td><td>00:00</td><td>08:00</td></tr>
+            <tr><td>12:00</td><td>03:00</td><td>11:00</td></tr>
+            <tr><td>15:00</td><td>06:00</td><td>14:00</td></tr>
+            <tr><td>18:00</td><td>09:00</td><td>17:00</td></tr>
+            <tr><td>21:00</td><td>12:00</td><td>20:00</td></tr>
+        </table>
+
+        <h2 id="config">6. 配置说明</h2>
+
+        <h3>6.1 监控配置 (config.json)</h3>
         <pre><code>{
   "keywords": [
     "AI agent",
-    "data visualization",
-    "business intelligence",
-    "ChatGPT",
-    "数据分析"
+    "enterprise AI",
+    "meeting transcription",
+    "RAG",
+    "AI chatbot",
+    "knowledge management",
+    "real-time translation",
+    "企業AI",
+    "会議録"
   ],
   "followed_accounts": [
     "elonmusk",
     "sama",
-    "karpathy"
+    "karpathy",
+    "OpenAI",
+    "AnthropicAI",
+    "GoogleAI"
   ],
   "rapid_growth_threshold": 1000,
-  "absolute_threshold": 5000,
-  "check_interval_minutes": 15
+  "absolute_threshold": 5000
 }</code></pre>
 
-        <h3>4.2 配置项说明</h3>
+        <h3>6.2 GitHub Secrets</h3>
         <table>
             <tr>
-                <th>配置项</th>
-                <th>类型</th>
-                <th>说明</th>
-            </tr>
-            <tr>
-                <td><code>keywords</code></td>
-                <td>数组</td>
-                <td>要监控的关键词列表，支持中英文</td>
-            </tr>
-            <tr>
-                <td><code>followed_accounts</code></td>
-                <td>数组</td>
-                <td>要监控的 Twitter 用户名（不含 @）</td>
-            </tr>
-            <tr>
-                <td><code>rapid_growth_threshold</code></td>
-                <td>数字</td>
-                <td>快速增长阈值（互动量/小时）</td>
-            </tr>
-            <tr>
-                <td><code>absolute_threshold</code></td>
-                <td>数字</td>
-                <td>绝对阈值（总互动量）</td>
-            </tr>
-            <tr>
-                <td><code>check_interval_minutes</code></td>
-                <td>数字</td>
-                <td>检查间隔（仅供参考）</td>
-            </tr>
-        </table>
-
-        <h3>4.3 GitHub Secrets 配置</h3>
-        <p>以下敏感信息存储在 GitHub Secrets 中：</p>
-        <table>
-            <tr>
-                <th>Secret 名称</th>
+                <th>Secret名称</th>
                 <th>说明</th>
             </tr>
             <tr>
                 <td><code>RAPIDAPI_KEY</code></td>
-                <td>RapidAPI 密钥</td>
+                <td>RapidAPI密钥 (Twitter数据)</td>
             </tr>
             <tr>
                 <td><code>RAPIDAPI_HOST</code></td>
-                <td>API 主机地址</td>
+                <td>API主机：twitter-api45.p.rapidapi.com</td>
             </tr>
             <tr>
-                <td><code>SENDGRID_API_KEY</code></td>
-                <td>SendGrid API 密钥</td>
-            </tr>
-            <tr>
-                <td><code>SENDGRID_FROM_EMAIL</code></td>
-                <td>发件人邮箱</td>
-            </tr>
-            <tr>
-                <td><code>NOTIFY_EMAIL</code></td>
-                <td>接收通知的邮箱</td>
+                <td><code>GOOGLE_API_KEY</code></td>
+                <td>Google AI API密钥 (Gemini)</td>
             </tr>
         </table>
 
-        <h2 id="usage">5. 使用方法</h2>
+        <h2 id="usage">7. 使用方法</h2>
 
-        <h3>5.1 查看运行状态</h3>
+        <h3>7.1 查看Dashboard</h3>
         <ol>
-            <li>访问 <a href="https://github.com/lirhcoder/x-trending-monitor/actions">GitHub Actions 页面</a></li>
-            <li>查看最新的运行记录</li>
-            <li>绿色 ✅ 表示成功，红色 ❌ 表示失败</li>
+            <li>访问：<a href="https://lirhcoder.github.io/x-trending-monitor/">https://lirhcoder.github.io/x-trending-monitor/</a></li>
+            <li>首页显示最新Dashboard入口和历史记录</li>
+            <li>点击具体时间查看该时刻的监控快照</li>
         </ol>
 
-        <h3>5.2 手动触发运行</h3>
+        <h3>7.2 查看运行状态</h3>
+        <ol>
+            <li>访问：<a href="https://github.com/lirhcoder/x-trending-monitor/actions">GitHub Actions</a></li>
+            <li>绿色 ✅ 表示成功，红色 ❌ 表示失败</li>
+            <li>点击具体运行查看详细日志</li>
+        </ol>
+
+        <h3>7.3 手动触发</h3>
         <ol>
             <li>进入 Actions 页面</li>
-            <li>点击 "X Trending Monitor" workflow</li>
+            <li>点击 "X Trending Monitor"</li>
             <li>点击 "Run workflow" → "Run workflow"</li>
         </ol>
 
-        <h3>5.3 查看运行日志</h3>
+        <h3>7.4 响应推荐帖子</h3>
         <ol>
-            <li>点击具体的运行记录</li>
-            <li>点击 "monitor" job</li>
-            <li>展开 "Run monitor" 步骤查看详细日志</li>
+            <li>查看Dashboard中的"高优先级"帖子</li>
+            <li>阅读AI分析的理由和回复建议</li>
+            <li>点击"查看原帖"跳转到X/Twitter</li>
+            <li>根据建议撰写有价值的回复，自然融入Sparticle产品</li>
         </ol>
 
-        <h2 id="upgrade">6. 升级与维护</h2>
+        <h2 id="upgrade">8. 升级与维护</h2>
 
-        <h3>6.1 修改监控关键词</h3>
+        <h3>8.1 修改监控关键词</h3>
         <div class="info">
-            <strong>步骤：</strong>
-            <ol>
-                <li>在 GitHub 仓库中打开 <code>config.json</code></li>
-                <li>点击编辑按钮（铅笔图标）</li>
-                <li>修改 <code>keywords</code> 数组</li>
-                <li>提交更改（Commit changes）</li>
-            </ol>
+            编辑 GitHub 仓库中的 <code>config.json</code>，修改 <code>keywords</code> 数组。
         </div>
-        <pre><code>// 示例：添加新关键词
-"keywords": [
-  "AI agent",
-  "data visualization",
-  "GBase",           // 新增
-  "低代码平台"        // 新增
-]</code></pre>
 
-        <h3>6.2 修改监控账号</h3>
-        <p>同样编辑 <code>config.json</code>，修改 <code>followed_accounts</code> 数组：</p>
-        <pre><code>// 示例：添加新账号
-"followed_accounts": [
-  "elonmusk",
-  "sama",
-  "karpathy",
-  "OpenAI",          // 新增
-  "anthropaborhood"  // 新增
-]</code></pre>
+        <h3>8.2 修改监控账号</h3>
+        <div class="info">
+            编辑 <code>config.json</code>，修改 <code>followed_accounts</code> 数组。
+        </div>
 
-        <h3>6.3 调整检测阈值</h3>
-        <p>根据实际效果调整阈值：</p>
+        <h3>8.3 调整阈值</h3>
         <ul>
-            <li><strong>收到太多通知</strong>：提高 <code>absolute_threshold</code>（如改为 10000）</li>
-            <li><strong>通知太少</strong>：降低 <code>absolute_threshold</code>（如改为 2000）</li>
+            <li><strong>帖子太多：</strong>提高 <code>absolute_threshold</code>（如 10000）</li>
+            <li><strong>帖子太少：</strong>降低 <code>absolute_threshold</code>（如 2000）</li>
         </ul>
-        <pre><code>// 示例：提高阈值减少通知
-"rapid_growth_threshold": 2000,
-"absolute_threshold": 10000</code></pre>
 
-        <h3>6.4 修改执行频率</h3>
-        <div class="highlight">
-            <strong>注意：</strong>修改执行频率需要编辑 <code>.github/workflows/monitor.yml</code> 文件
-        </div>
-        <p>找到 <code>schedule</code> 部分，修改 cron 表达式：</p>
-        <pre><code>on:
-  schedule:
-    # 每 15 分钟执行一次
-    - cron: '*/15 * * * *'
+        <h3>8.4 修改执行时间</h3>
+        <p>编辑 <code>.github/workflows/monitor.yml</code> 中的 cron 表达式：</p>
+        <pre><code># 当前设置：每小时执行，日本时间9:00-21:00
+- cron: '0 0-12 * * *'
 
-    # 每 30 分钟执行一次
-    # - cron: '*/30 * * * *'
+# 每2小时执行
+- cron: '0 0-12/2 * * *'
 
-    # 每小时执行一次
-    # - cron: '0 * * * *'
+# 只在工作日执行
+- cron: '0 0-12 * * 1-5'</code></pre>
 
-    # 每天早上 9 点执行
-    # - cron: '0 9 * * *'</code></pre>
+        <h3>8.5 更新公司信息</h3>
+        <p>编辑 <code>Sparticle_公司调查报告.md</code> 或 <code>scripts/analyzer.py</code> 中的 <code>COMPANY_CONTEXT</code>。</p>
 
-        <h3>6.5 修改通知邮箱</h3>
-        <ol>
-            <li>进入仓库 Settings → Secrets and variables → Actions</li>
-            <li>找到 <code>NOTIFY_EMAIL</code></li>
-            <li>点击 Update，输入新邮箱地址</li>
-        </ol>
+        <h3>8.6 常见问题</h3>
 
-        <h3>6.6 本地开发测试</h3>
-        <pre><code># 克隆仓库
-git clone https://github.com/lirhcoder/x-trending-monitor.git
-cd x-trending-monitor
-
-# 安装依赖
-pip install requests
-
-# 设置环境变量
-set RAPIDAPI_KEY=your-key
-set RAPIDAPI_HOST=twitter-api45.p.rapidapi.com
-set SENDGRID_API_KEY=your-sendgrid-key
-set SENDGRID_FROM_EMAIL=your@email.com
-
-# 运行测试
-python scripts/main.py --config config.json --email test@email.com</code></pre>
-
-        <h2 id="troubleshooting">7. 常见问题</h2>
-
-        <h3>Q1: 没有收到邮件通知</h3>
         <div class="success">
-            <strong>排查步骤：</strong>
-            <ol>
-                <li>检查垃圾邮件文件夹</li>
-                <li>登录 SendGrid 查看 Activity Feed</li>
-                <li>确认发件人邮箱已完成验证</li>
-                <li>如显示 Blocked，需完成域名验证或更换发件邮箱</li>
-            </ol>
+            <strong>Q: 显示"分析失败"</strong><br>
+            A: 检查 GOOGLE_API_KEY 是否正确配置
         </div>
 
-        <h3>Q2: GitHub Actions 运行失败</h3>
         <div class="success">
-            <strong>排查步骤：</strong>
-            <ol>
-                <li>查看 Actions 日志中的错误信息</li>
-                <li>确认所有 Secrets 已正确配置</li>
-                <li>检查 RapidAPI 账户余额/配额</li>
-            </ol>
+            <strong>Q: 帖子数量为0</strong><br>
+            A: 可能是同一天已检测过。等待每日重置(9:00 JST)或手动删除缓存
         </div>
 
-        <h3>Q3: 检测到的推文太多/太少</h3>
         <div class="success">
-            <strong>解决方案：</strong>
-            <ul>
-                <li>太多：提高 <code>absolute_threshold</code> 值</li>
-                <li>太少：降低阈值或添加更多关键词</li>
-            </ul>
-        </div>
-
-        <h3>Q4: API 配额用完</h3>
-        <div class="success">
-            <strong>解决方案：</strong>
-            <ul>
-                <li>检查 RapidAPI 用量，必要时升级套餐</li>
-                <li>减少监控的关键词和账号数量</li>
-                <li>降低执行频率</li>
-            </ul>
+            <strong>Q: 历史记录没有显示</strong><br>
+            A: 需要运行至少一次才会生成历史记录
         </div>
 
         <footer>
-            <p>X/Twitter Trending Monitor v1.0</p>
+            <p><strong>X/Twitter Trending Monitor V2.0</strong></p>
             <p>GitHub: <a href="https://github.com/lirhcoder/x-trending-monitor">github.com/lirhcoder/x-trending-monitor</a></p>
+            <p>Dashboard: <a href="https://lirhcoder.github.io/x-trending-monitor/">lirhcoder.github.io/x-trending-monitor</a></p>
             <p>最后更新：2026年1月</p>
         </footer>
     </div>
