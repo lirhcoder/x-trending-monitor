@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X/Twitter Trending Monitor - 项目文档</title>
+    <title>X热门帖子监控 - Sparticle营销助手</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 40px 20px;
-            background: #f5f5f5;
         }
-        .container {
+
+        header {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-            padding: 40px;
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-        h1 {
+
+        header h1 {
             color: #1d9bf0;
             font-size: 28px;
             margin-bottom: 8px;
@@ -33,569 +39,154 @@
             align-items: center;
             gap: 12px;
         }
+
         .subtitle {
             color: #666;
+            font-size: 14px;
+        }
+
+        .current-dashboard {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+
+        .current-dashboard h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #1d9bf0;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #1a8cd8;
+        }
+
+        .btn-large {
+            padding: 16px 32px;
             font-size: 16px;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+
+        .history-section h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #eee;
         }
-        h2 {
-            color: #14171a;
-            font-size: 20px;
-            margin: 32px 0 16px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #1d9bf0;
+
+        .history-list {
+            display: grid;
+            gap: 8px;
         }
-        h3 {
-            color: #14171a;
-            font-size: 16px;
-            margin: 24px 0 12px 0;
-        }
-        p {
-            margin-bottom: 12px;
-        }
-        ul, ol {
-            margin: 12px 0 12px 24px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        code {
-            background: #f1f3f4;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'SF Mono', Consolas, monospace;
-            font-size: 14px;
-        }
-        pre {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 16px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 16px 0;
-            font-size: 13px;
-        }
-        pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-        }
-        .highlight {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 12px 16px;
-            margin: 16px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .info {
-            background: #e7f3ff;
-            border-left: 4px solid #1d9bf0;
-            padding: 12px 16px;
-            margin: 16px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .success {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 12px 16px;
-            margin: 16px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background: #f8f9fa;
-            font-weight: 600;
-        }
-        .arch-diagram {
             background: #f8f9fa;
             border-radius: 8px;
-            padding: 24px;
-            margin: 16px 0;
-            text-align: center;
-        }
-        .arch-box {
-            display: inline-block;
-            background: white;
-            border: 2px solid #1d9bf0;
-            border-radius: 8px;
-            padding: 12px 20px;
-            margin: 8px;
-            font-weight: 500;
-        }
-        .arch-arrow {
-            color: #1d9bf0;
-            font-size: 24px;
-            margin: 0 8px;
-        }
-        .file-tree {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 16px 24px;
-            font-family: 'SF Mono', Consolas, monospace;
-            font-size: 13px;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-blue {
-            background: #e7f3ff;
-            color: #1d9bf0;
-        }
-        .badge-green {
-            background: #d4edda;
-            color: #28a745;
-        }
-        .badge-orange {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .toc {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px 24px;
-            margin-bottom: 32px;
-        }
-        .toc h3 {
-            margin-top: 0;
-            margin-bottom: 12px;
-        }
-        .toc ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .toc li {
-            margin-bottom: 6px;
-        }
-        .toc a {
-            color: #1d9bf0;
             text-decoration: none;
+            color: #333;
+            transition: background 0.2s;
         }
-        .toc a:hover {
-            text-decoration: underline;
+
+        .history-item:hover {
+            background: #e9ecef;
         }
-        footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+
+        .history-time {
+            font-weight: 500;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
             color: #666;
-            font-size: 14px;
+        }
+
+        .stat-high {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .empty-state {
             text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            padding: 24px;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="#1d9bf0">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            X/Twitter Trending Monitor
-        </h1>
-        <p class="subtitle">自动监控 X/Twitter 热门话题，发现高互动帖子并发送邮件通知</p>
+        <header>
+            <h1>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="#1d9bf0">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                X热门帖子监控
+            </h1>
+            <p class="subtitle">Sparticle 营销助手 - AI驱动的社交媒体机会发现</p>
+        </header>
 
-        <div class="toc">
-            <h3>目录</h3>
-            <ul>
-                <li><a href="#overview">1. 项目概述</a></li>
-                <li><a href="#architecture">2. 技术架构</a></li>
-                <li><a href="#workflow">3. 工作流程</a></li>
-                <li><a href="#config">4. 配置说明</a></li>
-                <li><a href="#usage">5. 使用方法</a></li>
-                <li><a href="#upgrade">6. 升级与维护</a></li>
-                <li><a href="#troubleshooting">7. 常见问题</a></li>
-            </ul>
+        <div class="current-dashboard">
+            <h2>📊 最新Dashboard</h2>
+            <a href="dashboard.html" class="btn btn-large">查看当前监控结果</a>
         </div>
 
-        <h2 id="overview">1. 项目概述</h2>
+        <h2 style="color: white; margin-bottom: 16px; padding-left: 8px;">📁 历史记录</h2>
 
-        <h3>1.1 目标</h3>
-        <p>自动发现 X/Twitter 上的高流量热门帖子，及时通知团队进行内容互动，借助热门话题提升 GBase 品牌曝光度。</p>
+        <div class="history-section">
+            <h3>📅 2026-01-01</h3>
+            <div class="history-list">
 
-        <h3>1.2 核心功能</h3>
-        <ul>
-            <li><strong>关键词监控</strong>：追踪指定关键词相关的高互动帖子</li>
-            <li><strong>账号监控</strong>：追踪指定 KOL 账号的热门内容</li>
-            <li><strong>智能检测</strong>：基于互动量阈值自动识别热门内容</li>
-            <li><strong>邮件通知</strong>：发现热门内容后自动发送邮件提醒</li>
-            <li><strong>定时执行</strong>：通过 GitHub Actions 每 15 分钟自动检查</li>
-        </ul>
+                <a href="history/2026-01-01/dashboard_20260101_1321.html" class="history-item">
+                    <span class="history-time">22:00 JST</span>
+                    <span class="history-stats">
+                        <span>1 条帖子</span>
+                        
+                    </span>
+                </a>
 
-        <h3>1.3 检测规则</h3>
-        <table>
-            <tr>
-                <th>规则类型</th>
-                <th>触发条件</th>
-                <th>说明</th>
-            </tr>
-            <tr>
-                <td><span class="badge badge-green">绝对阈值</span></td>
-                <td>总互动量 ≥ 5,000</td>
-                <td>点赞 + 转发 + 回复 + 引用</td>
-            </tr>
-            <tr>
-                <td><span class="badge badge-orange">快速增长</span></td>
-                <td>增长速度 ≥ 1,000/小时</td>
-                <td>检测短时间内爆发的内容</td>
-            </tr>
-        </table>
-
-        <h2 id="architecture">2. 技术架构</h2>
-
-        <h3>2.1 架构图</h3>
-        <div class="arch-diagram">
-            <div class="arch-box">GitHub Actions<br><small>定时触发器</small></div>
-            <span class="arch-arrow">→</span>
-            <div class="arch-box">Python 脚本<br><small>监控逻辑</small></div>
-            <span class="arch-arrow">→</span>
-            <div class="arch-box">RapidAPI<br><small>Twitter 数据</small></div>
-            <br><br>
-            <div class="arch-box">Python 脚本</div>
-            <span class="arch-arrow">→</span>
-            <div class="arch-box">SendGrid<br><small>邮件服务</small></div>
-            <span class="arch-arrow">→</span>
-            <div class="arch-box">团队邮箱<br><small>接收通知</small></div>
-        </div>
-
-        <h3>2.2 技术栈</h3>
-        <table>
-            <tr>
-                <th>组件</th>
-                <th>技术选型</th>
-                <th>说明</th>
-            </tr>
-            <tr>
-                <td>运行环境</td>
-                <td>GitHub Actions</td>
-                <td>免费的 Serverless 定时任务</td>
-            </tr>
-            <tr>
-                <td>编程语言</td>
-                <td>Python 3.11</td>
-                <td>简洁高效，生态丰富</td>
-            </tr>
-            <tr>
-                <td>Twitter API</td>
-                <td>RapidAPI (twitter-api45)</td>
-                <td>性价比高的第三方 API</td>
-            </tr>
-            <tr>
-                <td>邮件服务</td>
-                <td>SendGrid</td>
-                <td>免费 100 封/天</td>
-            </tr>
-            <tr>
-                <td>代码托管</td>
-                <td>GitHub</td>
-                <td>版本控制 + CI/CD</td>
-            </tr>
-        </table>
-
-        <h3>2.3 项目结构</h3>
-        <div class="file-tree">
-x-trending-monitor/<br>
-├── .github/workflows/<br>
-│   └── monitor.yml          # GitHub Actions 定时任务配置<br>
-├── scripts/<br>
-│   ├── main.py              # 主入口，协调监控和通知<br>
-│   ├── monitor.py           # 核心监控逻辑<br>
-│   └── notifier.py          # 邮件通知模块<br>
-├── config.json              # 监控配置（关键词、账号、阈值）<br>
-├── references/<br>
-│   ├── setup-guide.md       # 部署指南<br>
-│   └── deployment-guide.md  # 详细部署文档<br>
-└── assets/<br>
-    ├── config.template.json # 配置模板<br>
-    └── requirements.txt     # Python 依赖
-        </div>
-
-        <h2 id="workflow">3. 工作流程</h2>
-
-        <h3>3.1 执行流程</h3>
-        <ol>
-            <li><strong>定时触发</strong>：GitHub Actions 每 15 分钟自动启动</li>
-            <li><strong>加载配置</strong>：读取 config.json 中的关键词和账号列表</li>
-            <li><strong>数据采集</strong>：
-                <ul>
-                    <li>调用 RapidAPI 搜索关键词相关推文</li>
-                    <li>获取指定账号的最新推文</li>
-                </ul>
-            </li>
-            <li><strong>热度分析</strong>：
-                <ul>
-                    <li>计算每条推文的总互动量</li>
-                    <li>对比历史数据计算增长速度</li>
-                    <li>筛选超过阈值的推文</li>
-                </ul>
-            </li>
-            <li><strong>去重处理</strong>：排除已通知过的推文，避免重复提醒</li>
-            <li><strong>发送通知</strong>：将热门推文整理成邮件发送给团队</li>
-        </ol>
-
-        <h3>3.2 邮件通知示例</h3>
-        <div class="info">
-            <strong>邮件标题：</strong>[X Monitor] 36 Trending Post(s) Detected!<br><br>
-            <strong>邮件内容包含：</strong>
-            <ul>
-                <li>推文内容预览</li>
-                <li>互动数据（点赞、转发、回复）</li>
-                <li>增长速度（如适用）</li>
-                <li>原文链接（可直接点击查看）</li>
-            </ul>
-        </div>
-
-        <h2 id="config">4. 配置说明</h2>
-
-        <h3>4.1 监控配置 (config.json)</h3>
-        <pre><code>{
-  "keywords": [
-    "AI agent",
-    "data visualization",
-    "business intelligence",
-    "ChatGPT",
-    "数据分析"
-  ],
-  "followed_accounts": [
-    "elonmusk",
-    "sama",
-    "karpathy"
-  ],
-  "rapid_growth_threshold": 1000,
-  "absolute_threshold": 5000,
-  "check_interval_minutes": 15
-}</code></pre>
-
-        <h3>4.2 配置项说明</h3>
-        <table>
-            <tr>
-                <th>配置项</th>
-                <th>类型</th>
-                <th>说明</th>
-            </tr>
-            <tr>
-                <td><code>keywords</code></td>
-                <td>数组</td>
-                <td>要监控的关键词列表，支持中英文</td>
-            </tr>
-            <tr>
-                <td><code>followed_accounts</code></td>
-                <td>数组</td>
-                <td>要监控的 Twitter 用户名（不含 @）</td>
-            </tr>
-            <tr>
-                <td><code>rapid_growth_threshold</code></td>
-                <td>数字</td>
-                <td>快速增长阈值（互动量/小时）</td>
-            </tr>
-            <tr>
-                <td><code>absolute_threshold</code></td>
-                <td>数字</td>
-                <td>绝对阈值（总互动量）</td>
-            </tr>
-            <tr>
-                <td><code>check_interval_minutes</code></td>
-                <td>数字</td>
-                <td>检查间隔（仅供参考）</td>
-            </tr>
-        </table>
-
-        <h3>4.3 GitHub Secrets 配置</h3>
-        <p>以下敏感信息存储在 GitHub Secrets 中：</p>
-        <table>
-            <tr>
-                <th>Secret 名称</th>
-                <th>说明</th>
-            </tr>
-            <tr>
-                <td><code>RAPIDAPI_KEY</code></td>
-                <td>RapidAPI 密钥</td>
-            </tr>
-            <tr>
-                <td><code>RAPIDAPI_HOST</code></td>
-                <td>API 主机地址</td>
-            </tr>
-            <tr>
-                <td><code>SENDGRID_API_KEY</code></td>
-                <td>SendGrid API 密钥</td>
-            </tr>
-            <tr>
-                <td><code>SENDGRID_FROM_EMAIL</code></td>
-                <td>发件人邮箱</td>
-            </tr>
-            <tr>
-                <td><code>NOTIFY_EMAIL</code></td>
-                <td>接收通知的邮箱</td>
-            </tr>
-        </table>
-
-        <h2 id="usage">5. 使用方法</h2>
-
-        <h3>5.1 查看运行状态</h3>
-        <ol>
-            <li>访问 <a href="https://github.com/lirhcoder/x-trending-monitor/actions">GitHub Actions 页面</a></li>
-            <li>查看最新的运行记录</li>
-            <li>绿色 ✅ 表示成功，红色 ❌ 表示失败</li>
-        </ol>
-
-        <h3>5.2 手动触发运行</h3>
-        <ol>
-            <li>进入 Actions 页面</li>
-            <li>点击 "X Trending Monitor" workflow</li>
-            <li>点击 "Run workflow" → "Run workflow"</li>
-        </ol>
-
-        <h3>5.3 查看运行日志</h3>
-        <ol>
-            <li>点击具体的运行记录</li>
-            <li>点击 "monitor" job</li>
-            <li>展开 "Run monitor" 步骤查看详细日志</li>
-        </ol>
-
-        <h2 id="upgrade">6. 升级与维护</h2>
-
-        <h3>6.1 修改监控关键词</h3>
-        <div class="info">
-            <strong>步骤：</strong>
-            <ol>
-                <li>在 GitHub 仓库中打开 <code>config.json</code></li>
-                <li>点击编辑按钮（铅笔图标）</li>
-                <li>修改 <code>keywords</code> 数组</li>
-                <li>提交更改（Commit changes）</li>
-            </ol>
-        </div>
-        <pre><code>// 示例：添加新关键词
-"keywords": [
-  "AI agent",
-  "data visualization",
-  "GBase",           // 新增
-  "低代码平台"        // 新增
-]</code></pre>
-
-        <h3>6.2 修改监控账号</h3>
-        <p>同样编辑 <code>config.json</code>，修改 <code>followed_accounts</code> 数组：</p>
-        <pre><code>// 示例：添加新账号
-"followed_accounts": [
-  "elonmusk",
-  "sama",
-  "karpathy",
-  "OpenAI",          // 新增
-  "anthropaborhood"  // 新增
-]</code></pre>
-
-        <h3>6.3 调整检测阈值</h3>
-        <p>根据实际效果调整阈值：</p>
-        <ul>
-            <li><strong>收到太多通知</strong>：提高 <code>absolute_threshold</code>（如改为 10000）</li>
-            <li><strong>通知太少</strong>：降低 <code>absolute_threshold</code>（如改为 2000）</li>
-        </ul>
-        <pre><code>// 示例：提高阈值减少通知
-"rapid_growth_threshold": 2000,
-"absolute_threshold": 10000</code></pre>
-
-        <h3>6.4 修改执行频率</h3>
-        <div class="highlight">
-            <strong>注意：</strong>修改执行频率需要编辑 <code>.github/workflows/monitor.yml</code> 文件
-        </div>
-        <p>找到 <code>schedule</code> 部分，修改 cron 表达式：</p>
-        <pre><code>on:
-  schedule:
-    # 每 15 分钟执行一次
-    - cron: '*/15 * * * *'
-
-    # 每 30 分钟执行一次
-    # - cron: '*/30 * * * *'
-
-    # 每小时执行一次
-    # - cron: '0 * * * *'
-
-    # 每天早上 9 点执行
-    # - cron: '0 9 * * *'</code></pre>
-
-        <h3>6.5 修改通知邮箱</h3>
-        <ol>
-            <li>进入仓库 Settings → Secrets and variables → Actions</li>
-            <li>找到 <code>NOTIFY_EMAIL</code></li>
-            <li>点击 Update，输入新邮箱地址</li>
-        </ol>
-
-        <h3>6.6 本地开发测试</h3>
-        <pre><code># 克隆仓库
-git clone https://github.com/lirhcoder/x-trending-monitor.git
-cd x-trending-monitor
-
-# 安装依赖
-pip install requests
-
-# 设置环境变量
-set RAPIDAPI_KEY=your-key
-set RAPIDAPI_HOST=twitter-api45.p.rapidapi.com
-set SENDGRID_API_KEY=your-sendgrid-key
-set SENDGRID_FROM_EMAIL=your@email.com
-
-# 运行测试
-python scripts/main.py --config config.json --email test@email.com</code></pre>
-
-        <h2 id="troubleshooting">7. 常见问题</h2>
-
-        <h3>Q1: 没有收到邮件通知</h3>
-        <div class="success">
-            <strong>排查步骤：</strong>
-            <ol>
-                <li>检查垃圾邮件文件夹</li>
-                <li>登录 SendGrid 查看 Activity Feed</li>
-                <li>确认发件人邮箱已完成验证</li>
-                <li>如显示 Blocked，需完成域名验证或更换发件邮箱</li>
-            </ol>
-        </div>
-
-        <h3>Q2: GitHub Actions 运行失败</h3>
-        <div class="success">
-            <strong>排查步骤：</strong>
-            <ol>
-                <li>查看 Actions 日志中的错误信息</li>
-                <li>确认所有 Secrets 已正确配置</li>
-                <li>检查 RapidAPI 账户余额/配额</li>
-            </ol>
-        </div>
-
-        <h3>Q3: 检测到的推文太多/太少</h3>
-        <div class="success">
-            <strong>解决方案：</strong>
-            <ul>
-                <li>太多：提高 <code>absolute_threshold</code> 值</li>
-                <li>太少：降低阈值或添加更多关键词</li>
-            </ul>
-        </div>
-
-        <h3>Q4: API 配额用完</h3>
-        <div class="success">
-            <strong>解决方案：</strong>
-            <ul>
-                <li>检查 RapidAPI 用量，必要时升级套餐</li>
-                <li>减少监控的关键词和账号数量</li>
-                <li>降低执行频率</li>
-            </ul>
+            </div>
         </div>
 
         <footer>
-            <p>X/Twitter Trending Monitor v1.0</p>
-            <p>GitHub: <a href="https://github.com/lirhcoder/x-trending-monitor">github.com/lirhcoder/x-trending-monitor</a></p>
-            <p>最后更新：2026年1月</p>
+            <p>由 <a href="https://github.com/lirhcoder/x-trending-monitor">X Trending Monitor</a> 自动生成</p>
+            <p>每小时自动更新（日本时间 9:00-21:00）</p>
         </footer>
     </div>
 </body>
