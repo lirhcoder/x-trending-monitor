@@ -1,6 +1,11 @@
 # Core dependencies
-tweepy>=4.14.0
 requests>=2.31.0
+
+# AI Analysis (V2)
+google-generativeai>=0.3.0
+
+# Optional: Official Twitter API
+tweepy>=4.14.0
 
 # Optional: AWS support
 boto3>=1.34.0

@@ -1,17 +1,26 @@
 {
   "keywords": [
     "AI agent",
-    "data visualization",
+    "enterprise AI",
+    "meeting transcription",
+    "RAG",
+    "AI chatbot",
+    "knowledge management",
     "business intelligence",
-    "ChatGPT",
-    "数据分析"
+    "real-time translation",
+    "企業AI",
+    "会議録",
+    "ナレッジマネジメント"
   ],
   "followed_accounts": [
     "elonmusk",
     "sama",
-    "karpathy"
+    "karpathy",
+    "OpenAI",
+    "AnthropicAI",
+    "GoogleAI"
   ],
   "rapid_growth_threshold": 1000,
   "absolute_threshold": 5000,
-  "check_interval_minutes": 15
+  "check_interval_minutes": 30
 }

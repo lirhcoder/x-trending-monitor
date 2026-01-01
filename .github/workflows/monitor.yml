@@ -2,9 +2,14 @@ name: X Trending Monitor
 
 on:
   schedule:
-    # Run every 15 minutes
-    - cron: '*/15 * * * *'
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
   workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   monitor:
@@ -20,7 +25,8 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          pip install requests google-generativeai
 
       - name: Restore state from cache
         uses: actions/cache@v4
@@ -32,14 +38,22 @@ jobs:
           restore-keys: |
             monitor-state-
 
-      - name: Run monitor
+      - name: Run monitor (V2 - Dashboard)
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-          SENDGRID_FROM_EMAIL: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
-        run: python scripts/main.py --config config.json --email "$NOTIFY_EMAIL"
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          MONITOR_MODE: v2
+        run: |
+          python scripts/main.py --config config.json --mode v2 --output docs
+
+      - name: Commit and push dashboard
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git diff --staged --quiet || git commit -m "Update dashboard $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
 
       - name: Save state
         if: always()
@@ -49,3 +63,29 @@ jobs:
             engagement_history.json
             alerted_tweets.json
           key: monitor-state-${{ github.run_number }}
+
+  # Deploy to GitHub Pages after monitor completes
+  deploy:
+    needs: monitor
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main  # Get latest commit with dashboard updates
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
