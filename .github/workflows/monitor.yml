@@ -2,8 +2,8 @@ name: X Trending Monitor
 
 on:
   schedule:
-    # Run every 30 minutes
-    - cron: '*/30 * * * *'
+    # Run every hour, only during Japan business hours (9:00-21:00 JST = 0:00-12:00 UTC)
+    - cron: '0 0-12 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
@@ -28,6 +28,15 @@ jobs:
         run: |
           pip install requests google-generativeai
 
+      - name: Reset daily alerts (at midnight JST / 15:00 UTC previous day)
+        run: |
+          # Check if it's 0:00 UTC (9:00 JST) - reset daily
+          HOUR=$(date -u +%H)
+          if [ "$HOUR" = "00" ]; then
+            echo "Resetting daily alert history..."
+            rm -f alerted_tweets.json engagement_history.json
+          fi
+
       - name: Restore state from cache
         uses: actions/cache@v4
         with:
@@ -47,6 +56,23 @@ jobs:
         run: |
           python scripts/main.py --config config.json --mode v2 --output docs
 
+      - name: Archive historical dashboard
+        run: |
+          TIMESTAMP=$(date -u +'%Y%m%d_%H%M')
+          DATE=$(date -u +'%Y-%m-%d')
+
+          # Create history directory
+          mkdir -p docs/history/$DATE
+
+          # Copy current dashboard to history
+          if [ -f docs/dashboard.html ]; then
+            cp docs/dashboard.html "docs/history/$DATE/dashboard_$TIMESTAMP.html"
+            cp docs/data.json "docs/history/$DATE/data_$TIMESTAMP.json" 2>/dev/null || true
+          fi
+
+          # Generate index page
+          python scripts/generate_index.py
+
       - name: Commit and push dashboard
         run: |
           git config --local user.email "action@github.com"
@@ -64,7 +90,6 @@ jobs:
             alerted_tweets.json
           key: monitor-state-${{ github.run_number }}
 
-  # Deploy to GitHub Pages after monitor completes
   deploy:
     needs: monitor
     runs-on: ubuntu-latest
@@ -76,7 +101,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main  # Get latest commit with dashboard updates
+          ref: main
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
