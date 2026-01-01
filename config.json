@@ -1,0 +1,17 @@
+{
+  "keywords": [
+    "AI agent",
+    "data visualization",
+    "business intelligence",
+    "ChatGPT",
+    "数据分析"
+  ],
+  "followed_accounts": [
+    "elonmusk",
+    "sama",
+    "karpathy"
+  ],
+  "rapid_growth_threshold": 1000,
+  "absolute_threshold": 5000,
+  "check_interval_minutes": 15
+}

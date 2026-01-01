@@ -1,0 +1,22 @@
+# State files (managed by GitHub Actions cache)
+engagement_history.json
+alerted_tweets.json
+alerts.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+nul
