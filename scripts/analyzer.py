@@ -85,7 +85,14 @@ class GeminiAnalyzer:
 
     def __init__(self, api_key: str):
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # Use gemini-1.5-flash or fall back to gemini-pro
+        try:
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
+        except Exception:
+            try:
+                self.model = genai.GenerativeModel('gemini-1.5-flash-latest')
+            except Exception:
+                self.model = genai.GenerativeModel('gemini-pro')
 
     def analyze_tweets(self, tweets: list[dict]) -> list[AnalyzedTweet]:
         """Analyze a batch of tweets and return ranked recommendations."""
