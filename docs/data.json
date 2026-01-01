@@ -1,0 +1,48 @@
+{
+  "last_updated": "2026-01-01T12:15:59.014916",
+  "total_tweets": 3,
+  "tweets": [
+    {
+      "tweet_id": "2003190103729144224",
+      "original_text": "Your Year with ChatGPT!\n\nNow rolling out to everyone in the US, UK, Canada, New Zealand, and Australia who have reference saved memory and reference chat history turned on.\n\nJust make sure your app is updated. https://t.co/whVkS1qxKu",
+      "translated_text": "[翻译失败]",
+      "author_username": "OpenAI",
+      "engagement": 7124,
+      "url": "https://x.com/OpenAI/status/2003190103729144224",
+      "relevance_score": 0,
+      "engagement_potential": 0,
+      "recommended_action": "分析失败",
+      "reasoning": "AI分析出错",
+      "suggested_reply_angle": "",
+      "priority_rank": 1
+    },
+    {
+      "tweet_id": "2002099459883479311",
+      "original_text": "You can now adjust specific characteristics in ChatGPT, like warmth, enthusiasm, and emoji use.\n\nNow available in your \"Personalization\" settings. https://t.co/7WSkOQVTKU",
+      "translated_text": "[翻译失败]",
+      "author_username": "OpenAI",
+      "engagement": 5449,
+      "url": "https://x.com/OpenAI/status/2002099459883479311",
+      "relevance_score": 0,
+      "engagement_potential": 0,
+      "recommended_action": "分析失败",
+      "reasoning": "AI分析出错",
+      "suggested_reply_angle": "",
+      "priority_rank": 2
+    },
+    {
+      "tweet_id": "1999560839679082507",
+      "original_text": "Listen up 🔊 We’ve made some updates to our Gemini Audio models and capabilities:\n\n— Gemini’s live speech-to-speech translation capability is rolling out in a beta experience to the Google Translate app, bringing you real-time audio translation that captures the nuance of human speech\n\n— Gemini 2.5 Flash and 2.5 Pro Text-to-Speech preview models bring improved adherence to style prompts, precision pacing with context-aware speed adjustments, and character voice consistency for multi-speaker scenarios\n\n— Gemini 2.5 Flash Native Audio is now updated, with improvements to handle complex workflows, navigate user instructions, and hold natural conversations",
+      "translated_text": "[翻译失败]",
+      "author_username": "GoogleAI",
+      "engagement": 5563,
+      "url": "https://x.com/GoogleAI/status/1999560839679082507",
+      "relevance_score": 0,
+      "engagement_potential": 0,
+      "recommended_action": "分析失败",
+      "reasoning": "AI分析出错",
+      "suggested_reply_angle": "",
+      "priority_rank": 3
+    }
+  ]
+}
