@@ -143,8 +143,16 @@ recommended_action 选项：
 只输出JSON数组，不要其他内容。"""
 
         try:
+            print(f"Sending {len(tweets)} tweets to Gemini for analysis...")
             response = self.model.generate_content(prompt)
+
+            # Check for blocked response
+            if not response.text:
+                print(f"Gemini returned empty response. Candidates: {response.candidates}")
+                raise ValueError("Empty response from Gemini")
+
             response_text = response.text.strip()
+            print(f"Gemini response length: {len(response_text)} chars")
 
             # Extract JSON from response
             if '```json' in response_text:
@@ -152,7 +160,11 @@ recommended_action 选项：
             elif '```' in response_text:
                 response_text = response_text.split('```')[1].split('```')[0]
 
+            response_text = response_text.strip()
+            print(f"Extracted JSON length: {len(response_text)} chars")
+
             analyses = json.loads(response_text)
+            print(f"Parsed {len(analyses)} tweet analyses")
 
             # Build analyzed tweets
             analyzed = []
@@ -189,7 +201,10 @@ recommended_action 选项：
             return analyzed
 
         except Exception as e:
+            import traceback
             print(f"Error analyzing tweets with Gemini: {e}")
+            print(f"Error type: {type(e).__name__}")
+            traceback.print_exc()
             # Return tweets without AI analysis
             return [
                 AnalyzedTweet(
