@@ -20,11 +20,10 @@ def generate_dashboard_html(
     if last_updated is None:
         last_updated = datetime.utcnow()
 
-    # Group tweets by recommendation
+    # Group tweets by recommendation (removed "仅观察" category to save tokens)
     high_priority = [t for t in analyzed_tweets if t.get('recommended_action') == '高优先级回复']
     recommended = [t for t in analyzed_tweets if t.get('recommended_action') == '建议回复']
-    optional = [t for t in analyzed_tweets if t.get('recommended_action') == '可选回复']
-    observe = [t for t in analyzed_tweets if t.get('recommended_action') in ['仅观察', '分析失败']]
+    optional = [t for t in analyzed_tweets if t.get('recommended_action') in ['可选回复', '分析失败']]
 
     def tweet_card(tweet: dict, show_rank: bool = True) -> str:
         """Generate HTML for a single tweet card."""
@@ -447,9 +446,8 @@ def generate_dashboard_html(
         </header>
 
         {tweet_section('🔥 高优先级 - 立即行动', high_priority, 'section-high')}
-        {tweet_section('👍 建议回复', recommended, 'section-medium')}
-        {tweet_section('💡 可选回复', optional, 'section-low')}
-        {tweet_section('👀 仅观察', observe, 'section-observe')}
+        {tweet_section('💡 建议回复', recommended, 'section-medium')}
+        {tweet_section('📝 可选回复', optional, 'section-low')}
 
         <footer>
             <p>由 <a href="https://github.com/lirhcoder/x-trending-monitor">X Trending Monitor</a> 自动生成</p>

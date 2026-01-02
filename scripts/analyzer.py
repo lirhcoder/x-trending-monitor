@@ -141,11 +141,12 @@ class GeminiAnalyzer:
 - relevance_score (1-10): 与Sparticle产品/服务的相关程度
 - engagement_potential (1-10): 回复后获得曝光的潜力（考虑作者影响力、话题热度、讨论氛围）
 
-recommended_action 选项：
-- "高优先级回复" - 非常值得立即互动
-- "建议回复" - 值得花时间互动
+recommended_action 选项（只选择以下三个之一）：
+- "高优先级回复" - 非常值得立即互动（相关性>=7且互动潜力>=6）
+- "建议回复" - 值得花时间互动（相关性>=5或互动潜力>=7）
 - "可选回复" - 有一定价值但非必须
-- "仅观察" - 相关性低或不适合商业互动
+
+注意：如果帖子相关性很低或不适合商业互动，请直接跳过该帖子，不要包含在输出中。
 
 只输出JSON数组，不要其他内容。"""
 
@@ -190,7 +191,7 @@ recommended_action 选项：
                     url=tweet.get('url', ''),
                     relevance_score=analysis.get('relevance_score', 0),
                     engagement_potential=analysis.get('engagement_potential', 0),
-                    recommended_action=analysis.get('recommended_action', '仅观察'),
+                    recommended_action=analysis.get('recommended_action', '可选回复'),
                     reasoning=analysis.get('reasoning', ''),
                     suggested_reply_angle=analysis.get('suggested_reply_angle', ''),
                     priority_rank=0  # Will be set after sorting
